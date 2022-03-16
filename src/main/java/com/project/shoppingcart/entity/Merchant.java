@@ -1,18 +1,15 @@
 package com.project.shoppingcart.entity;
 
-import com.project.shoppingcart.enumclass.Status;
-import com.project.shoppingcart.enumclass.Type;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.project.shoppingcart.enumclass.UserStatus;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "merchant")
@@ -23,19 +20,15 @@ public class Merchant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "username")
-    private String userName;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "password")
-    private String password;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "type", updatable = false)
-    private Type Usertype;
+    @Column(name = "email")
+    private String email;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private Status status;
+    private UserStatus status;
 
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp
@@ -44,4 +37,16 @@ public class Merchant {
     @Column(name = "updated_at", insertable = false)
     @UpdateTimestamp
     private OffsetDateTime updatedAt;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "merchant")
+    @JsonManagedReference
+    private List<Product> products = new ArrayList();
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", nullable = false)
+    private AuthUser authUser;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "authUser")
+    @JsonManagedReference
+    private List<Address> address = new ArrayList();
 }

@@ -13,18 +13,18 @@ public class AddressRequestDto {
     @NotBlank(message = "enter country")
     private String country;
 
-    @NotBlank(message="enter city")
+    @NotBlank(message = "enter city")
     private String city;
 
-    @NotBlank(message ="enter state")
+    @NotBlank(message = "enter state")
     private String state;
 
-   // @NotBlank(message = "enter the postal code")
-   // @Pattern(regexp = "(^$|[0-9]{6})")
+    /*@NotBlank(message = "enter the postal code")
+    @Pattern(regexp = "(^$|[0-9]{6})")*/
     private long postalCode;
-    
-    //@NotBlank
-   // @Pattern(regexp = "(^$|[0-9]{10})",message = "invalid mobile number")
+
+    /*@NotBlank
+    @Pattern(regexp = "(^$|[0-9]{10})",message = "invalid mobile number")*/
     private long mobile;
 
 }

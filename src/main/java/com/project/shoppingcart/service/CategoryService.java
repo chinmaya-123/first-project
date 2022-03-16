@@ -1,8 +1,6 @@
-
 package com.project.shoppingcart.service;
 
 import com.project.shoppingcart.dto.request.CategoryRequestDto;
-import com.project.shoppingcart.dto.response.CategoryResponseDto;
 import com.project.shoppingcart.entity.Category;
 import com.project.shoppingcart.modelmapper.CategoryMapper;
 import com.project.shoppingcart.repository.CategoryRepository;
@@ -22,26 +20,25 @@ public class CategoryService {
     CategoryMapper categoryMapper;
 
     public void create(CategoryRequestDto categoryRequestDto) {
-        Category category=categoryMapper.dtoToEntity(categoryRequestDto);
-        if (categoryRepository.findByName(category.getName()) != null)
+        Category category = categoryMapper.dtoToEntity(categoryRequestDto);
+        if (categoryRepository.getByName(category.getName()) != null)
             throw new RuntimeException("category exist");
 
         categoryRepository.save(category);
     }
 
-    public List<CategoryResponseDto> listCategory() {
-        List<Category>categories=categoryRepository.findAll();
-        return categoryMapper.entityToDto(categories);
+    public List<Category> listCategory() {
+        return categoryRepository.findAll();
     }
 
-    public CategoryResponseDto CategoryById(int theId) {
+    public Category CategoryById(int theId) {
         Optional<Category> result = categoryRepository.findById(theId);
         Category theCategory;
         if (result.isPresent())
             theCategory = result.get();
         else
             throw new RuntimeException("category Id not found....");
-        return categoryMapper.entityToDto(theCategory);
+        return theCategory;
     }
 
     public void updateCategory(int id, CategoryRequestDto theCategory) {
@@ -51,8 +48,14 @@ public class CategoryService {
         categoryRepository.save(tempCategory);
     }
 
-    public void delete(String name) {
+    public void deleteByName(String name) {
+
         categoryRepository.deleteByName(name);
+    }
+
+    public Category getByName(String categoryName)
+    {
+        return categoryRepository.getByName(categoryName);
     }
 
 }

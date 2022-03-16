@@ -1,6 +1,7 @@
 package com.project.shoppingcart.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -12,17 +13,13 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id",nullable = false)
+    @Column(name = "id", nullable = false)
     private Integer id;
 
-    /*@ManyToOne(cascade = CascadeType.ALL)
-    @JoinTable(name = "user_address", joinColumns = {
-            @JoinColumn(name = "address_id", referencedColumnName = "id") }, inverseJoinColumns = {
-            @JoinColumn(name = "user_id", referencedColumnName = "id") })
-    @JsonBackReference*/
     @ManyToOne()
-    @JoinColumn(name="consumer_id", nullable=false)
-    private Consumer consumer;
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
+    private AuthUser authUser;
 
     @Column(name = "address1")
     private String address1;

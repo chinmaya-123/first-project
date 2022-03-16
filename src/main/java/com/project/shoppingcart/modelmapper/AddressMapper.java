@@ -14,8 +14,6 @@ public class AddressMapper {
     @Autowired
     ModelMapper mapper;
 
-    @Autowired
-    ConsumerRepository consumerRepository;
 
     public Address dtoToEntity(AddressRequestDto addressRequestDto) {
         Address address = mapper.map(addressRequestDto, Address.class);

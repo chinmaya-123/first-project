@@ -1,18 +1,21 @@
 package com.project.shoppingcart.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.project.shoppingcart.dto.request.AddressRequestDto;
 import com.project.shoppingcart.dto.request.ConsumerRequestDto;
-import com.project.shoppingcart.dto.response.ConsumerResponseDto;
 import com.project.shoppingcart.entity.Address;
+import com.project.shoppingcart.entity.AuthUser;
 import com.project.shoppingcart.entity.Consumer;
-import com.project.shoppingcart.enumclass.Status;
-import com.project.shoppingcart.enumclass.Type;
-import com.project.shoppingcart.exception.EmailExistException;
+import com.project.shoppingcart.enumclass.UserStatus;
+import com.project.shoppingcart.enumclass.UserType;
+import com.project.shoppingcart.exception.EmailFoundException;
+import com.project.shoppingcart.exception.ConsumerNotFoundException;
 import com.project.shoppingcart.modelmapper.AddressMapper;
 import com.project.shoppingcart.modelmapper.ConsumerMapper;
 import com.project.shoppingcart.repository.AddressRepository;
+import com.project.shoppingcart.repository.AuthUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,35 +36,49 @@ public class ConsumerService {
     @Autowired
     AddressMapper addressMapper;
 
+    @Autowired
+    AuthUserRepository authUserRepository;
+
     public void createUser(ConsumerRequestDto consumerRequestDto) {
 
         Consumer consumer = consumerMapper.dtoToEntity(consumerRequestDto);
 
         if (consumerRepository.findByEmail(consumer.getEmail()) != null)
-            throw new EmailExistException("email exists..");
+            throw new EmailFoundException("email exists..");
         consumerRepository.save(consumer);
 
     }
 
-    public List<ConsumerResponseDto> getAll() {
+    public List<Consumer> getAll() {
         List<Consumer> consumer = consumerRepository.findAll();
-        return consumerMapper.entityToDto(consumer);
+        return consumer;
     }
 
     public Consumer getById(int id) {
-        return consumerRepository.getById(id);
+       Optional<Consumer> consumer=consumerRepository.findById(id);
+       if(consumer.isPresent())
+           return consumer.get();
+       else
+           throw new ConsumerNotFoundException("user id not found");
     }
 
 
-    public void statusUpdate(Type type, int id) {
+    public void statusUpdate(UserType type, int id) {
         Consumer theConsumer = consumerRepository.getById(id);
-        theConsumer.setStatus(Status.INACTIVE);
+        if(theConsumer==null)
+            throw new ConsumerNotFoundException("consumer id not found");
+        theConsumer.setStatus(UserStatus.INACTIVE);
         consumerRepository.save(theConsumer);
     }
 
-    public void addAddress(AddressRequestDto addressRequestDto, Consumer consumer) {
+    public void addAddress(AddressRequestDto addressRequestDto, AuthUser user) {
         Address address = addressMapper.dtoToEntity(addressRequestDto);
-        address.setConsumer(consumer);
+        address.setAuthUser(user);
         addressRepository.save(address);
+    }
+
+    public List<Address> getAddress(int id)
+    {
+        return  addressRepository.getByUserId(id);
     }
 }

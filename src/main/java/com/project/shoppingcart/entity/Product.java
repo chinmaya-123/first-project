@@ -11,39 +11,53 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.OffsetDateTime;
 
 @Entity
 @Data
-@Table(name="product")
+@Table(name = "product")
 public class Product {
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
-	
-	@NotBlank
-	@Column(name="name")
-	private String name;
-	
-	@Column(name="description")
-	private String description;
-	
-	@ManyToOne()
-	@JoinColumn(name="id",insertable=false,updatable=false)
-	private Category categoryId;
-	
-	@Column(name="qty")
-	private int qty;
-	
-	@NotBlank
-	@NotNull
-	@Column(name="price")
-	private double price;
-	
-	@Column(name="discount")
-	private int discount;
-	
-	@Column(name="created_at")
-	private String createdAt;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "quantity")
+    private int qty;
+
+    @Column(name = "price")
+    private double price;
+
+    @Column(name = "discount")
+    private double discount;
+
+    @Column(name = "created_at", updatable = false)
+    @CreationTimestamp
+    private OffsetDateTime createdAt;
+
+    @Column(name = "modified_at", insertable = false)
+    @UpdateTimestamp
+    private OffsetDateTime modifiedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false, updatable = false)
+    @JsonBackReference
+    private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "merchant_id", nullable = false,updatable = false)
+    @JsonBackReference
+    private Merchant merchant;
 }

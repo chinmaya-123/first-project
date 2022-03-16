@@ -7,5 +7,4 @@ CREATE TABLE `consumer` (
   `type` varchar(45) DEFAULT NULL,
   `status`varchar(45) DEFAULT NULL,
    PRIMARY KEY (`id`),
-
 )

@@ -28,6 +28,6 @@ public class ConsumerRequestDto {
     @NotEmpty
     private String password;
 
-    private List<Address> addresses;
+   // private List<Address> addresses;
 
 }

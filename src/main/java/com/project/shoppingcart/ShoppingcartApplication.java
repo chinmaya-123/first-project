@@ -1,9 +1,6 @@
 package com.project.shoppingcart;
 
-import com.project.shoppingcart.modelmapper.AddressMapper;
-import com.project.shoppingcart.modelmapper.CategoryMapper;
-import com.project.shoppingcart.modelmapper.MerchantMapper;
-import com.project.shoppingcart.modelmapper.ConsumerMapper;
+import com.project.shoppingcart.modelmapper.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -33,7 +30,6 @@ public class ShoppingcartApplication extends SpringBootServletInitializer {
 
     @Bean
     public ModelMapper modelMapper() {
-
         return new ModelMapper();
     }
 
@@ -48,15 +44,18 @@ public class ShoppingcartApplication extends SpringBootServletInitializer {
     }
 
     @Bean
-
     public CategoryMapper categoryMapper() {
         return new CategoryMapper();
     }
 
     @Bean
-
     public AddressMapper addressMapper() {
         return new AddressMapper();
+    }
+
+    @Bean
+    public ProductMapper productMapper() {
+        return new ProductMapper();
     }
 
 }

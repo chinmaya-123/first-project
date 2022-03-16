@@ -8,6 +8,7 @@ import com.project.shoppingcart.entity.Category;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
-	public Category deleteByName(String name);
-	public Category findByName(String name);
+	public Integer deleteByName(String name);
+
+	public Category getByName(String name);
 }

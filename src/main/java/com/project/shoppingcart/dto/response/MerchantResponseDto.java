@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class MerchantResponseDto {
-    private int id;
-    private String userName;
-    private String type;
+    private String name;
+    private String email;
 }

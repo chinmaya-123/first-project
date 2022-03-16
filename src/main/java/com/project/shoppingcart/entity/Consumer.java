@@ -1,8 +1,6 @@
 package com.project.shoppingcart.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.project.shoppingcart.enumclass.Status;
-import com.project.shoppingcart.enumclass.Type;
+import com.project.shoppingcart.enumclass.UserStatus;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -28,21 +26,14 @@ public class Consumer {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "password", updatable = false)
-    private String password;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "type", updatable = false)
-    private Type userType;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", nullable = false)
+    private AuthUser authUser1;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", updatable = true)
-    private Status status;
+    private UserStatus status;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy ="consumer")
-    /*@JoinTable(name = "user_address", joinColumns = {
-            @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
-            @JoinColumn(name = "address_id", referencedColumnName = "id")})*/
-    //@JsonManagedReference
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "authUser")
     private List<Address> address = new ArrayList();
 }
